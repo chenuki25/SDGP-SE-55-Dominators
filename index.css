@@ -332,6 +332,20 @@ align-items: center;
   gap: var(--gap-md);
 }
 
+
+.main,
+.sidebar {
+  position: absolute;
+  top: 0;
+  overflow-y: auto;
+}
+.sidebar {
+  height: 100%;
+  bottom: 0;
+  left: 0;
+  width: 240px;
+}
+
 .top-controls {
   align-items: center;
   justify-content: center;
