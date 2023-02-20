@@ -1,0 +1,67 @@
+
+.icon-playlists {
+  align-self: stretch;
+  flex: 1;
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+  max-height: 100%;
+}
+.icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.icon3,
+.sidebar-link7 {
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.icon3 {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  overflow: hidden;
+  display: none;
+  align-items: flex-start;
+}
+
+.icon5,
+.top-controls {
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+}
+.icon5 {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.icon-volume {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.topnav-icon-button {
+  border-radius: var(--br-md);
+  background-color: var(--color-gray-200);
+  border: 1px solid rgba(235, 235, 255, 0.05);
+  display: none;
+  flex-direction: row;
+  padding: var(--padding-sm);
+  align-items: center;
+  justify-content: center;
+  transform: rotate(90deg);
+  transform-origin: 0 0;
+}
