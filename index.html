@@ -1,172 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
   <head >
-    <title>Music Player</title>
+    <title>Motion Music Player</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1, width=device-width" />
-
-    <link rel="stylesheet" href="./global.css" />
-    <link rel="stylesheet" href="./index.css" />
-
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&display=swap"
-    />
+    <script src="script.js" defer></script>
+    <link rel="shortcut icon" href="images/our logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="./global.css" >
+    <link rel="stylesheet" href="./index.css" >
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
   <body>
     <div class="screen">
-      <div class="sidebar">
-        <div class="container">
-          <input class="sidebar-link" type="text" />
-          <div class="sidebar-section">
-            <div class="sidebar-link1"><div class="home">Home</div></div>
-            <div class="sidebar-link2"><div class="home">Explore</div></div>
-          </div>
-          <div class="sidebar-section1">
-            <div class="section-title">MY COLLECTION</div>
-            <div class="sidebar-link4">
-              <div class="icon">
-                <img
-                  class="icon-playlists"
-                  alt=""
-                  src="public/iconplaylists.svg"
-                />
-              </div>
-              <div class="home3">Playlists</div>
+      <div class="wrapper">
+        <div id="wave">
+          <span class="stroke"></span>
+          <span class="stroke"></span>
+          <span class="stroke"></span>
+          <span class="stroke"></span>
+          <span class="stroke"></span>
+          <span class="stroke"></span>
+          <span class="stroke"></span>
+        </div> 
+        <div class="details">
+          <div class="now-playing">PLAYING x OF y</div>
+          <div class="track-art"></div>
+          <div class="track-name">Track Name</div>
+          <div class="track-artist">Track Artist</div>
+        </div>
+        <div class="slider_container">
+          <div class="current-time">00:00</div>
+          <input type="range" min="1" max="100" value="0" class="seek_slider" onchange="seekTo()">
+          <div class="total-duration">00:00</div>
+        </div>
+        
+        <div class="slider_container">
+          <i class="fa fa-volume-down"></i>
+          <input type="range" min="1" max="100" value="99" class="volume_slider" onchange="setVolume()">
+          <i class="fa fa-volume-up"></i>
+        </div>
+
+        <div class="buttons">
+            <div class="random-track" onclick="randomTrack()">
+                <i class="fas fa-random fa-2x" title="random"></i>
             </div>
-            <button class="sidebar-link4">
-              <div class="icon">
-                <img
-                  class="icon-playlists"
-                  alt=""
-                  src="public/iconalbums.svg"
-                />
+            <div class="prev-track" onclick="prevTrack()">
+                <i class="fa fa-step-backward fa-2x"></i>
+            </div>
+            <div class="playpause-track" onclick="playpauseTrack()">
+                <i class="fa fa-play-circle fa-5x"></i>
+            </div>
+            <div class="next-track" onclick="nextTrack()">
+                <i class="fa fa-step-forward fa-2x"></i>
+            </div>
+            <div class="repeat-track" onclick="repeatTrack()">
+                <i class="fa fa-repeat fa-2x" title="repeat"></i>
+            </div>
+        </div>
+        
+      </div>
+        <div class="sidebar">
+          <div class="container">
+            <div class= "nameLogo"><img src="images/logo 2.png" width="200" height="80">
+            <input class="sidebar-link" type="text" />
+            <div class="sidebar-section">
+              <div class="sidebar-link1"><div class="home">Home</div></div>
+              <div class="sidebar-link2"><div class="home">Explore</div></div>
+            </div>
+            <div class="sidebar-section1">
+              <div class="section-title">MY COLLECTION</div>
+              <div class="sidebar-link4">
+                <div class="icon">
+                  <img
+                    class="icon-playlists"
+                    alt=""
+                    src="public/iconplaylists.svg"
+                  />
+                </div>
+                <div class="home3">Playlists</div>
               </div>
-              <div class="home3">Albums</div></button
-            ><button class="sidebar-link4">
-              <div class="icon">
-                <img
-                  class="icon-playlists"
-                  alt=""
-                  src="public/icontracks.svg"
-                />
-              </div>
-              <div class="home3">Tracks</div>
-            </button>
-          </div>
-          <div class="sidebar-section2">
-            <div class="section-title">MY PLAYLISTS</div>
-            <div class="sidebar-link3">
               <button class="sidebar-link4">
-                <div class="home3">Playlist 1</div>
-              </button>
-              <button class="sidebar-link4">
-                <div class="home3">Playlist 1</div>
+                <div class="icon">
+                  <img
+                    class="icon-playlists"
+                    alt=""
+                    src="public/iconalbums.svg"
+                  />
+                </div>
+                <div class="home3">Albums</div></button
+              ><button class="sidebar-link4">
+                <div class="icon">
+                  <img
+                    class="icon-playlists"
+                    alt=""
+                    src="public/icontracks.svg"
+                  />
+                </div>
+                <div class="home3">Tracks</div>
               </button>
             </div>
-            <input class="sidebar-link7" type="text" />
-          </div>
-          <div class="sidebar-section3">
-            <div class="section-title">Imported Songs</div>
-            <button class="sidebar-link4">
-              <div class="icon3">
-                <img
-                  class="icon-playlists"
-                  alt=""
-                  src="public/iconplaylists.svg"
-                />
+            <div class="sidebar-section2">
+              <div class="section-title">MY PLAYLISTS</div>
+              <div class="sidebar-link3">
+                <button class="sidebar-link4">
+                  <div class="home3">Playlist 1</div>
+                </button>
+                <button class="sidebar-link4">
+                  <div class="home3">Playlist 1</div>
+                </button>
               </div>
-              <div class="home3">List 1</div>
-            </button>
-          </div>
-          <div class="sidebar-section4">
-            <div>
-              <label>Turn on the camera</label>
+              <input class="sidebar-link7" type="text" />
             </div>
-            <div>
-              <label class="switch">
-                <input type="checkbox" id="camera-on">
-                <span class="slider round"></span>
-              </label>
-              <script src="camera-on.js"></script>
-          </div>
-          </div>
-        </div>
-      </div>
-      <div class="main">
-        <div class="topnav"><input class="topnav-bar-input" type="text" /></div>
-      </div>
-      <div class="bottom-player">
-        <div class="left-container">
-          <img
-            class="left-container-child"
-            alt=""
-            src="public/rectangle-39@2x.png"
-          /><button class="content">
-            <input class="title" type="text" />
-            <div class="the-xx">The XX</div>
-            <div class="plaing-from-coexist">PLAING FROM: Coexist</div>
-          </button>
-        </div>
-        <div class="center-container">
-          <div class="top-controls">
-            <div class="icon5">
-              <img class="icon-playlists" alt="" src="public/iconshuffle.svg" />
+            <div class="sidebar-section3">
+              <div class="section-title">IMPORTED SONGS</div>
+              <button class="sidebar-link4">
+                <div class="icon3">
+                  <img
+                    class="icon-playlists"
+                    alt=""
+                    src="public/iconplaylists.svg"
+                  />
+                </div>
+                <div class="home3">List 1</div>
+              </button>
             </div>
-            <div class="icon5">
-              <img
-                class="icon-playlists"
-                alt=""
-                src="public/iconrewindfilled.svg"
-              />
+            <div class="sidebar-section4">
+              <div>
+                <label>Turn on the camera</label>
+              </div>
+              <div>
+                <label class="switch">
+                  <input type="checkbox" id="camera-on">
+                  <span class="slider round"></span>
+                </label>
+                <script src="camera-on.js"></script>
             </div>
-            <div class="icon">
-              <img
-                class="icon-playlists"
-                alt=""
-                src="public/iconplayfilled.svg"
-              />
-            </div>
-            <div class="icon5">
-              <img
-                class="icon-playlists"
-                alt=""
-                src="public/iconforwardfilled.svg"
-              />
-            </div>
-            <div class="icon5">
-              <img class="icon-playlists" alt="" src="public/iconrepeat.svg" />
-            </div>
-          </div>
-          <div class="bottom-controls">
-            <div class="div">0:00</div>
-            <div class="bottom-controls-child"></div>
-            <div class="div">0:00</div>
-          </div>
-        </div>
-        <div class="right-container">
-          <img class="icon-volume" alt="" src="public/iconvolume.svg" />
-          <div class="icon3">
-            <img
-              class="icon-playlists"
-              alt=""
-              src="public/iconchromecast.svg"
-            />
-          </div>
-          <div class="icon3">
-            <img class="icon-playlists" alt="" src="public/iconqueue.svg" />
-          </div>
-          <div class="topnav-icon-button">
-            <div class="icon5">
-              <img
-                class="icon-playlists"
-                alt=""
-                src="public/iconarrowleft.svg"
-              />
             </div>
           </div>
         </div>
-      </div>
+      
+                    <!-- <div class="main"> 
+                      <div class="topnav"><input class="topnav-bar-input" type="text" /></div>
+                    </div>-->
     </div>
-  </body>
+  </body>
 </html>
