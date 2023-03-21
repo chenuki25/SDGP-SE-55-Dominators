@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Example of the Authorization Code flow with Spotify</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <style type="text/css">
+      #login, #loggedin, #playlists, #playlist-tracks, #player {
+        display: none;
+      }
+      
+      .text-overflow {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 500px;
+      }
+    </style>
+    <link rel="stylesheet" href="./style.css">
+  </head>
+
+  <body>
+    <div class="container">
+      <div id="login">
+        <a href="/login" class="btn btn-primary ">Log in with Spotify</a>
+        <a href="./guest.html" class="btn btn-primary ">Guest</a>
+      </div>
+      <div id="loggedin">
+        <div id="user-profile">
+        </div>
+      </div>
+      <!-- show the playlists -->
+      <div id="playlists"></div>
+      <!-- show playlist tracks -->
+      <div id="playlist-tracks">
+      </div>
+      
+    </div>
+    
+
+
+    <script id="user-profile-template" type="text/x-handlebars-template">
+      <h1>Logged in as {{display_name}}</h1>
+      <button id="show-playlists">Show playlists</button>
+    </script>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
+
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    
+    <script>
+      (function() {
+
+        /**
+         * Obtains parameters from the hash of the URL
+         * @return Object
+         */
+        function getHashParams() {
+          var hashParams = {};
+          var e, r = /([^&;=]+)=?([^&;]*)/g,
+              q = window.location.hash.substring(1);
+          while ( e = r.exec(q)) {
+             hashParams[e[1]] = decodeURIComponent(e[2]);
+          }
+          return hashParams;
+        }
+
+        var userProfileSource = document.getElementById('user-profile-template').innerHTML,
+            userProfileTemplate = Handlebars.compile(userProfileSource),
+            userProfilePlaceholder = document.getElementById('user-profile');
+
+        var params = getHashParams();
+
+        var access_token = params.access_token,
+            refresh_token = params.refresh_token,
+            error = params.error;
+
+        if (error) {
+          alert('There was an error during the authentication');
+        } else {
+          if (access_token) {
+            //redirect to file in web
+            window.location.href = "http://localhost:8888/spotify.html?access_token=" + access_token;
+
+
+            $.ajax({
+                url: 'https://api.spotify.com/v1/me',
+                headers: {
+                  'Authorization': 'Bearer ' + access_token
+                },
+                success: function(response) {
+                  userProfilePlaceholder.innerHTML = userProfileTemplate(response);
+                  //add event listener to the show playlists button
+                  document.getElementById('show-playlists').addEventListener('click',function(){
+                    //make another API call to get the user's playlists
+                    $.ajax({
+                      url: 'https://api.spotify.com/v1/me/playlists',
+                      headers: {
+                        'Authorization': 'Bearer ' + access_token
+                      },
+                      success: function(response) {
+                        //loop through the playlists and render its images and names
+                        for(var i=0;i<response.items.length;i++){
+                          var playlist = response.items[i];
+                          var playlistImage = playlist.images && playlist.images.length > 0 && playlist.images[0].url;
+                          var playlistName = playlist.name;
+                          if(playlistImage){
+                            var playlistContainer = document.createElement('div');
+                            playlistContainer.classList.add('playlist-item');
+                            playlistContainer.setAttribute('id', 'playlist-' + playlist.id);
+                            console.log(playlistContainer);
+                            var playlistImageElement = document.createElement('img');
+                            playlistImageElement.classList.add('playlist-image');
+                            playlistImageElement.src = playlistImage;
+                            var playlistNameElement = document.createElement('p');
+                            playlistNameElement.classList.add('playlist-name');
+                            playlistNameElement.innerHTML = playlistName;
+                            //add the playlist image and name to the playlist container
+                            playlistContainer.appendChild(playlistImageElement);
+                            playlistContainer.appendChild(playlistNameElement);
+                            //add the playlist container to the user profile placeholder
+                            document.getElementById('playlists').appendChild(playlistContainer);
+                            //render initial screen
+                            $('#login').hide();
+                            $('#loggedin').hide();
+                            $('#playlists').show();
+                            $('#player').hide();
+                        }
+                          }
+                        //remove all existing event listeners for playlist items
+                        document.querySelectorAll('.playlist-item').forEach(function(element){
+                          element.removeEventListener('click', onPlaylistClick);
+                        });
+
+                        //add event listener to the playlist container
+                        document.querySelectorAll('.playlist-item').forEach(function(element){
+                          element.addEventListener('click', onPlaylistClick);
+                        });
+
+                        function onPlaylistClick() {
+                          var playlistId = this.getAttribute('id').replace('playlist-', '');
+                          
+                          //make another API call to get the playlist's tracks
+                          $.ajax({
+                            url: 'https://api.spotify.com/v1/playlists/' + playlistId + '/tracks',
+                            headers: {
+                              'Authorization': 'Bearer ' + access_token
+                            },
+                            success:function(response){
+                              //clear any existing tracks
+                              document.getElementById('playlist-tracks').innerHTML = '';
+                              //loop through the tracks and render its names and artists
+                              for(var j=0;j<response.items.length;j++){
+                                var track = response.items[j];
+                                var trackName = track.track.name;
+                                var trackArtist = track.track.artists[0].name;
+                                var trackContainer = document.createElement('div');
+                                trackContainer.classList.add('track-item');
+                                //add track image
+                                var trackImageElement = document.createElement('img');
+                                trackImageElement.classList.add('track-image');
+                                trackImageElement.src = track.track.album.images[0].url;
+                                trackContainer.appendChild(trackImageElement);
+                                //add track name and artist
+                                var trackNameElement = document.createElement('p');
+                                trackNameElement.classList.add('track-name');
+                                trackNameElement.innerHTML = 'Song:\t' + trackName;
+                                var trackArtistElement = document.createElement('p');
+                                trackArtistElement.classList.add('track-artist');
+                                trackArtistElement.innerHTML = '[Artist name:\t' + trackArtist+']';
+                                //add a play button
+                                var trackPreviewUrl = track.track.preview_url;
+                                console.log(trackPreviewUrl);
+                                var playButton = document.createElement('button');
+                                playButton.classList.add('btn', 'btn-default','play-button');
+                                playButton.innerHTML = 'Play';
+                                playButton.addEventListener('click', function() {
+                                  //play the track
+                                  var audio = new Audio(trackPreviewUrl);
+                                  audio.play();
+                                  console.log('playing track');
+                                  $('#login').hide();
+                                  $('#loggedin').hide();
+                                  $('#playlists').hide();
+                                  $('#playlist-tracks').hide();
+                                  $('#player').show();
+                                });
+                                //add the track name and artist to the track container
+                                trackContainer.appendChild(playButton);
+                                trackContainer.appendChild(trackNameElement);
+                                trackContainer.appendChild(trackArtistElement);
+                                //add the track container to the playlist tracks placeholder
+                                document.getElementById('playlist-tracks').appendChild(trackContainer);
+                              }
+                              
+                              //add a back button to go back to the playlists screen
+                              var backButton = document.createElement('button');
+                              backButton.classList.add('back-button');
+                              backButton.innerHTML = 'Back';
+                              document.getElementById('playlist-tracks').appendChild(backButton);
+                              
+                              //render playlist tracks screen
+                              $('#login').hide();
+                              $('#loggedin').hide();
+                              $('#playlists').hide();
+                              $('#player').hide();
+                              $('#playlist-tracks').show();
+
+                              backButton.addEventListener('click', function(){
+                                $('#login').hide();
+                                $('#loggedin').hide();
+                                $('#playlists').show();
+                                $('#playlist-tracks').hide();
+                                $('#player').hide();
+                              });
+                            }
+                          });
+                        }
+                      }
+                    })
+                  });
+                  $('#login').hide();
+                  $('#loggedin').show();
+                }
+            });
+          } else {
+              // render initial screen
+              $('#login').show();
+              $('#loggedin').hide();
+          }
+        }
+      })();
+
+
+    </script>
+  </body>
+</html>
+

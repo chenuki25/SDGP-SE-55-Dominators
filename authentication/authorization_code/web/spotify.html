@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head >
+    <title>Motion Music Player</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <link rel="shortcut icon" href="images/our logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="./global.css" >
+    <link rel="stylesheet" href="./spotify_style.css" >
+    <link rel="stylesheet" href="./style.css" >
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body>
+    <div class="screen">
+      <div class="wrapper" id="wrapper">
+        <div id="playlists"></div>
+        <div id="player"></div>
+        <div id="playlist-tracks"></div>
+        <div id="albums"></div>
+        <div id="album-tracks"></div>
+        <div id="tracks"></div>
+      </div>
+
+        <div class="sidebar">
+          <div class="container">
+            <div class= "nameLogo"><img src="images/logo 2.png" width="200" height="80">
+            <input class="sidebar-link" type="text" />
+            <div class="sidebar-section">
+              <div class="sidebar-link1"><div class="home">Home</div></div>
+              <div class="sidebar-link2"><div class="home">Explore</div></div>
+            </div>
+            <div class="sidebar-section1">
+              <div class="section-title">MY COLLECTION</div>
+              <button class="sidebar-link4-playlist sidebar-link4">
+                <div class="icon">
+                  <img
+                    class="icon-playlists"
+                    alt=""
+                    src="public/iconplaylists.svg"
+                  />
+                </div>
+                <div class="home3">Playlists</div>
+              </button>
+              <button class="sidebar-link4-album sidebar-link4">
+                <div class="icon">
+                  <img
+                    class="icon-playlists"
+                    alt=""
+                    src="public/iconalbums.svg"
+                  />
+                </div>
+                <div class="home3">Albums</div>
+                </button>
+              <button class="sidebar-link4-tracks sidebar-link4 ">
+                <div class="icon">
+                  <img
+                    class="icon-playlists"
+                    alt=""
+                    src="public/icontracks.svg"
+                  />
+                </div>
+                <div class="home3">Tracks</div>
+              </button>
+            </div>
+            
+            
+            <div class="sidebar-section4">
+              <div>
+                <label>Turn on the camera</label>
+              </div>
+              <div>
+                <label class="switch">
+                  <input type="checkbox" id="camera-on">
+                  <span class="slider round"></span>
+                </label>
+                <script src="camera-on.js"></script>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <script id="playlist-template" type="text/x-handlebars-template">
+      {{#each items}}
+        <div class="playlist playlist-item" data-playlist-id="{{id}}">
+          <img src="{{images.0.url}}" alt="{{name}}" class="playlist-image">
+          <div class="playlist-name">{{name}}</div>
+        </div>
+      {{/each}}
+    </script>
+
+    <script id="track-template" type="text/x-handlebars-template">
+      {{#each tracks}}
+        <div class="track-item">
+          <img src="{{this.album.images.0.url}}" alt="{{this.name}}" class="track-image">
+          <p class="track-name">Song: {{this.name}}</p>
+          <p class="track-artist">[Artist name: {{this.artists.0.name}}]</p>
+          <button class="btn btn-default play-button" data-preview-url="{{this.preview_url}}">Play</button>
+          <!-- add a pause button -->
+          
+        </div>
+      {{/each}}
+      <button class="back-button">Back</button>
+    </script>
+
+    <script id="album-template" type="text/x-handlebars-template">
+      {{#each albums}}
+        <div class="album-item" data-album-id="{{this.id}}">
+          <img src="{{this.images.0.url}}" alt="{{this.name}}" class="album-image">
+          <p class="album-name">Album: {{this.name}}</p>
+          <p class="album-artist">[Artist name: {{this.artists.0.name}}]</p>
+        </div>
+      {{/each}}
+    </script>
+
+    <script id="album-tracks-template" type="text/x-handlebars-template">
+      {{#each tracks}}
+        <div class="track-item ">
+          <p class="track-name">Song: {{this.name}}</p>
+          <p class="track-artist">[Artist name: {{this.artists.name}}]</p>
+          <button class="btn btn-default play-button" data-preview-url="{{this.preview_url}}">Play</button>
+        </div>
+      {{/each}}
+      <button class="back-button">Back</button>
+    </script>
+
+    <script id="saved-tracks-template" type="text/x-handlebars-template">
+      {{#each tracks}}
+        <div class="track-item">
+          <img src="{{this.album.images.0.url}}" alt="{{this.name}}" class="track-image">
+          <p class="track-name">Song: {{this.name}}</p>
+          <p class="track-artist">[Artist name: {{this.artists.0.name}}]</p>
+          <button class="btn btn-default play-button" data-preview-url="{{this.preview_url}}">Play</button>
+        </div>
+      {{/each}}
+    </script>
+  
+    
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script>
+
+    //retrieve the access token from the URL
+    // get the URL of the current page
+      var url = window.location.href;
+
+      // parse the URL to get the parameters
+      var params = new URLSearchParams(new URL(url).search);
+
+      // get the value of the access_token parameter
+      var access_token = params.get("access_token");
+      console.log(access_token);
+    
+    //add a eventhandler to the playlist button in sidebar-link4
+    var playlistButton = document.querySelector(".sidebar-link4-playlist");
+    playlistButton.addEventListener("click", function () {
+      console.log(access_token);
+      console.log("playlist button clicked");
+      //hide the albums
+      document.getElementById('albums').style.display = "none";
+
+    // retrieve the user's playlists from Spotify
+      $.ajax({
+        url: 'https://api.spotify.com/v1/me/playlists',
+        headers: {
+          'Authorization': 'Bearer ' + access_token
+        },
+        success: function(response) {
+          
+          // compile the Handlebars template
+          var playlistSource = document.getElementById('playlist-template').innerHTML;
+          var playlistTemplate = Handlebars.compile(playlistSource);
+
+          // render the playlists using the template
+          var html = playlistTemplate(response);
+          document.getElementById('playlists').innerHTML = html;
+          //add a eventhandler to the playlist buttons in playlist item
+          var playlistItems = document.querySelectorAll(".playlist-item");
+          //show the playlists
+          document.getElementById('playlists').style.display = "block";
+          playlistItems.forEach(function (playlistItem) {
+            playlistItem.addEventListener("click", function () {
+              //get the stored playlist id
+              var playlistId = playlistItem.getAttribute("data-playlist-id");
+              //make another API call to get the playlist's tracks
+              $.ajax({
+                url: 'https://api.spotify.com/v1/playlists/' + playlistId + '/tracks',
+                headers: {
+                  'Authorization': 'Bearer ' + access_token
+                },
+                success:function(response){
+                console.log('clicked');
+                console.log(response);
+                
+                
+                //show the playlist tracks
+                document.getElementById('playlist-tracks').style.display = "block";
+                var source = document.getElementById('track-template').innerHTML;
+                var template = Handlebars.compile(source);
+                var tracks = response.items.map(function(item) {
+                    return item.track;
+                });
+
+                var html = template({ tracks: tracks });
+                console.log('loaded');
+                document.getElementById('playlist-tracks').innerHTML = html;
+                //hide the playlists
+                document.getElementById('playlists').style.display = "none";
+                var audio = null;
+                var playButtons = document.querySelectorAll(".play-button");
+                playButtons.forEach(function (playButton) {
+                  playButton.addEventListener("click", function () {
+                    var previewUrl = playButton.getAttribute("data-preview-url");
+                    if(playButton.innerHTML == "Play"){
+                      //check if there is another audio playing
+                      var currentAudio = document.querySelector("audio");
+                      audio = new Audio(previewUrl);
+                      audio.play();
+                      playButton.innerHTML = "Pause";
+                    }else if(playButton.innerHTML == "Pause"){
+                      playButton.innerHTML = "Play";
+                      audio.pause();
+                    }
+                  });
+                });
+                
+                var backButton = document.querySelector(".back-button");
+                backButton.addEventListener("click", function () {
+                  //show playlists tracks
+                  document.getElementById('playlists').style.display = "block";
+                  //hide the tracks
+                  document.getElementById('playlist-tracks').style.display = "none";
+                  
+                });
+                
+                }
+              });
+            });
+          });
+          
+        }
+      });
+    });
+
+    //add a eventhandler to the album button in sidebar-link4-album
+    var albumButton = document.querySelector(".sidebar-link4-album");
+    albumButton.addEventListener('click', function () {
+      //retrieve the user's albums from Spotify
+      $.ajax({
+        url: 'https://api.spotify.com/v1/me/albums',
+        headers: {
+            'Authorization': 'Bearer ' + access_token
+        },
+        success:function(response){
+            console.log(response);
+            console.log('Albums retrieved successfully');
+            //show the albums
+            document.getElementById('albums').style.display = "block";
+            var source = document.getElementById('album-template').innerHTML;
+            var template = Handlebars.compile(source);
+            var albums = response.items.map(function(item) {
+                return item.album;
+            });
+            var html = template({albums: albums});
+            document.getElementById('albums').innerHTML = html;
+            
+            //hide the playlists
+            document.getElementById('playlists').style.display = "none";
+            //hide the tracks
+            document.getElementById('playlist-tracks').style.display = "none";
+            //show the albums
+            document.getElementById('albums').style.display = "block";
+            
+            console.log('loaded albums');
+            //add a eventhandler to the album buttons in album item
+            var albumItem = document.querySelectorAll(".album-item");
+            //loop through the album items
+            albumItem.forEach(function (albumItem) {albumItem.addEventListener("click", function () {
+              //get the stored album id
+              var albumId = albumItem.getAttribute("data-album-id");
+              console.log(albumId);
+              //make another API call to get the album's tracks
+              $.ajax({
+                  url: `https://api.spotify.com/v1/albums/${albumId}/tracks`,
+                  headers: {
+                    'Authorization': 'Bearer ' + access_token
+                  },
+                  success: function(response) {
+                    console.log("albam tracks retrieved successfully");
+
+                    var source = document.getElementById('album-tracks-template').innerHTML;
+                    var template = Handlebars.compile(source);
+                    var tracks = response.items.map(function(item) {
+                        return item;
+                    });
+                    console.log(tracks);
+                    var html = template({ tracks: tracks });
+                    document.getElementById('album-tracks').innerHTML = html;
+                    //hide the albums
+                    document.getElementById('albums').style.display = "none";
+                    //show the album tracks
+                    document.getElementById('album-tracks').style.display = "block";
+                    var audio = null;
+                    var playButtons = document.querySelectorAll(".play-button");
+                    playButtons.forEach(function (playButton) {
+                      playButton.addEventListener("click", function () {
+                        var previewUrl = playButton.getAttribute("data-preview-url");
+                        console.log("clicked play button" + previewUrl);
+                        if(playButton.innerHTML == "Play"){
+                          //check if there is another audio playing
+                          var currentAudio = document.querySelector("audio");
+                          audio = new Audio(previewUrl);
+                          audio.play();
+                          playButton.innerHTML = "Pause";
+                        }else if(playButton.innerHTML == "Pause"){
+                          playButton.innerHTML = "Play";
+                          audio.pause();
+                        }
+                      });
+                    });
+                  },
+                  error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                  }
+                });
+            });
+          });
+            
+        },
+        error: function(error){
+            console.log('Error retrieving albums: ', error);
+        }
+      });
+    });
+
+    //add event handler to the track button
+    var tracksbutton = document.querySelector(".sidebar-link4-tracks");
+    tracksbutton.addEventListener('click',function(){
+      $.ajax({
+        url: 'https://api.spotify.com/v1/me/tracks',
+        headers: {
+          'Authorization': 'Bearer ' + access_token
+        },
+        success:function(response){
+          var source = document.getElementById('track-template').innerHTML;
+          var template = Handlebars.compile(source);
+          var tracks = response.items.map(function(item) {
+              return item.track;
+          });
+          var html = template({ tracks: tracks });
+          document.getElementById('tracks').innerHTML = html;
+          //hide the playlists
+          document.getElementById('playlists').style.display = "none";
+          //hide the tracks
+          document.getElementById('playlist-tracks').style.display = "none";
+          //show the albums
+          document.getElementById('albums').style.display = "none";
+          //hide the album tracks
+          document.getElementById('album-tracks').style.display = "none";
+          //show the tracks
+          document.getElementById('tracks').style.display = "block";
+          var audio = null;
+          var playButtons = document.querySelectorAll(".play-button");
+          playButtons.forEach(function (playButton) {
+            playButton.addEventListener("click", function () {
+              var previewUrl = playButton.getAttribute("data-preview-url");
+              console.log("clicked play button" + previewUrl);
+              if(playButton.innerHTML == "Play"){
+                //check if there is another audio playing
+                var currentAudio = document.querySelector("audio");
+                audio = new Audio(previewUrl);
+                audio.play();
+                playButton.innerHTML = "Pause";
+              }else if(playButton.innerHTML == "Pause"){
+                playButton.innerHTML = "Play";
+                audio.pause();
+              }
+
+            });
+          });
+        }
+      });
+    });
+
+
+  </script>
+
+  </body>
+</html>

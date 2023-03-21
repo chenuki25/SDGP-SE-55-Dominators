@@ -1,0 +1,117 @@
+#login {
+    background-color: #141111;
+    color: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    width: 400px;
+    margin: 0 auto;
+    margin-top: 100px;
+    text-align: center;
+    font-family: cursive;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+.btn-primary{
+    margin-top: 50px;
+    margin-bottom: 50px;
+    font-size: large;
+}
+.playlist-item{
+    display: inline-flex;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #f4f4f4;
+    border-radius: 5px;
+    background-color: #141111;
+    cursor: pointer;
+    align-items: center;
+}
+/* show playlist image and name in centre inline */
+.playlist-item img{
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    
+}
+/* show playlist name in centre inline */
+.playlist-item .playlist-name{
+    display: inline-block;
+    width: 100%;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #ffffff;
+    font-size: 17px;
+    margin-left: 3%;
+}
+.track-item , .album-item{
+    display: inline-flex;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #1b1a1a;
+    cursor: pointer;
+    align-items: center;
+}
+/* show track image and name in centre inline */
+.track-item img,.album-item img{
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    
+}
+/* space between artist name and track name */
+.track-item .track-artist, .album-item .album-artist{
+    margin-left: 10px;
+    color: #f5f5f5;
+}
+
+.play-button{
+    margin-right: 30px;
+    margin-left: auto;
+    text-align: right;
+}
+
+/* add scroll bar to playlist tracks */
+#playlist-tracks{
+    height: 100vh; /* set the height of the container */
+    overflow-y: scroll; /* enable vertical scrollbar */
+    overflow-x: hidden; /* hide horizontal scrollbar */
+}
+
+#playlist-tracks::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  #playlist-tracks::-webkit-scrollbar-track {
+    background-color: #1b1a1a;
+  }
+  
+  #playlist-tracks::-webkit-scrollbar-thumb {
+    background-color: #1b1a1a;
+    border-radius: 5px;
+  }
+
+  .track-item .track-name , .track-item .track-artist{
+    font-size: 17px;
+    font-weight: bold;
+    color: #f9f9f9;
+    margin-left: 3%;
+  }
+  .back-button {
+    position: relative;
+    margin-left: 49%;
+    font-size: x-large;
+    color: #ffffff;
+    background-color: black;
+    font-family: cursive;
+}
+
+  
