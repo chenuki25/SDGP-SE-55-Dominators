@@ -12,12 +12,16 @@ let total_duration = document.querySelector('.total-duration');
 let wave = document.getElementById('wave'); 
 let randomIcon = document.querySelector('.fa-random');
 let current_track = document.createElement('audio');
+const volumeIcon = document.querySelector('.volume-icon');
+
 
 
 let musicIndex = 0;
 let isRandom = false;
 let isPlaying = false;
 let updateTimer;
+let volumeMuted = false;
+
 
 
 const Songs_list = [
@@ -106,7 +110,7 @@ function loadTrack(musicIndex){
     updateTimer = setInterval(setUpdate, 1000);
 
     current_track.addEventListener('ended', nextTrack);
-    random_bg_color();
+    // random_bg_color();
 }
 
 
@@ -179,6 +183,46 @@ function seekTo(){
 function setVolume(){
     current_track.volume = volume_slider.value / 100;
 }
+
+// ----- volume mute & unmute function starts
+volumeIcon.addEventListener('click', muteUnmute)
+
+function muteUnmute(){
+    if(volumeMuted === false){
+        volumeIcon.innerHTML = `
+            <span class="material-symbols-outlined">
+                volume_off
+            </span>
+        `;
+        volume_slider.value = 0
+        current_track.muted = true
+        volumeMuted = true
+    }else{
+        volumeIcon.innerHTML = `
+            <span class="material-symbols-outlined">
+                volume_down
+            </span>
+        `;
+        current_track.muted = false
+        volume_slider.value = setVolume
+        volumeMuted = false
+    }
+}
+
+// ----- volume mute & unmute function ends
+
+
+function volumeUp(){
+    volume_slider.value += 10;
+    current_track.volume = volume_slider.value / 100
+}
+
+function volumeDown(){
+    volume_slider.value -= 10;
+    current_track.volume = volume_slider.value / 100
+}
+
+
 function setUpdate(){
     let seekPosition = 0;
     if(!isNaN(current_track.duration)){
@@ -200,4 +244,38 @@ function setUpdate(){
     }
 }
 
+// --------- voice recognition part starts
+
+if (annyang) {
+    // commands.
+    const commands = {
+      'play': () => { playpauseTrack() },
+      'pause music': () => { playpauseTrack()},
+      'pause': () => { playpauseTrack() },
+      'next': () => { nextTrack() },
+      'next song': () => { nextTrack() },
+      'back': () => { prevTrack() },
+      'previous song': () => { prevTrack() },
+      'mute': () => { muteUnmute() },
+      'unmute': () => { muteUnmute() },
+      'volume up': () => { volumeUp() },
+      'increase volume': () => { volumeUp() },
+      'volume down': () => { volumeDown() },
+      'decreace volume': () => { volumeDown() },
+
+      'play random': () => { playRandom() },
+      'trun on random': () => { playRandom() },
+      'repeat on': () => { repeatTrack() },
+      'repeat': () => { repeatTrack() },
+      'turn on repeat': () => { repeatTrack() },
+    };
+  
+    // Add commands to annyang
+    annyang.addCommands(commands);
+  
+    // Start listening.
+    annyang.start();
+}
+
+// ------- voice recognition part ends
 
