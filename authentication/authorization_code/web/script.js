@@ -265,6 +265,9 @@ if (annyang) {
 
       'play random': () => { playRandom() },
       'trun on random': () => { playRandom() },
+      'play random off': () => { playRandom() },
+      'trun off random': () => { playRandom() },
+
       'repeat on': () => { repeatTrack() },
       'repeat': () => { repeatTrack() },
       'turn on repeat': () => { repeatTrack() },
