@@ -110,7 +110,6 @@ function loadTrack(musicIndex){
     updateTimer = setInterval(setUpdate, 1000);
 
     current_track.addEventListener('ended', nextTrack);
-    // random_bg_color();
 }
 
 
