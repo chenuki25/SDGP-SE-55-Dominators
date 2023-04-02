@@ -480,6 +480,13 @@ input:checked + .slider:before {
   font-size: 1rem;
   }
   
+  .video{
+    max-width: 240px;
+  }
+  video{
+    max-width: 210px;
+    margin-left: 5px;
+  }
   .track-name {
   font-size: 2.5rem;
   color:black;
