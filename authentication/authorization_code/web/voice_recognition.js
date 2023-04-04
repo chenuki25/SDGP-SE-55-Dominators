@@ -4,6 +4,7 @@ recognition.continuous = false;
 recognition.lang = 'en-US';
 recognition.interimResults = false;
 recognition.maxAlternatives = 1;
+let micOn = false;
 
 //Add event listeners for the recognition object
 recognition.onresult = function(event) {
@@ -46,10 +47,15 @@ recognition.onerror = function(event) {
 function startSpeechRecognition() {
   console.log('Starting speech recognition...');
   recognition.start();
+  micOn = true;
 }
 
 document.addEventListener('keydown', function(event) {
-  if (event.key === 'r') {
-    startSpeechRecognition();
-   }
+    if(!micOn && event.key === 'r'){
+        startSpeechRecognition();
+    }else if(micOn && event.key === 'r'){
+        micOn = false;
+        console.log('Speech recognition stoped...');
+        recognition.stop();
+    }
 });
