@@ -1,3 +1,7 @@
+const micIcon = document.querySelector('.mic-icon');
+const micButton = document.querySelector('#micBtn');
+
+
 //Define the speech recognition object
 const recognition = new webkitSpeechRecognition();
 recognition.continuous = false;
@@ -47,14 +51,27 @@ recognition.onerror = function(event) {
 function startSpeechRecognition() {
   console.log('Starting speech recognition...');
   recognition.start();
+  micButton.innerHTML = `
+            <span class="material-symbols-outlined">
+                mic
+            </span>
+        `;
   micOn = true;
 }
+
+// micIcon.addEventListener("click", startSpeechRecognition);
 
 document.addEventListener('keydown', function(event) {
     if(!micOn && event.key === 'r'){
         startSpeechRecognition();
     }else if(micOn && event.key === 'r'){
         micOn = false;
+        micButton.innerHTML = `
+            <span class="material-symbols-outlined">
+                mic_off
+            </span>
+        `;
+        
         console.log('Speech recognition stoped...');
         recognition.stop();
     }
