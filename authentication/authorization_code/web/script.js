@@ -1,3 +1,6 @@
+export{playpauseTrack, nextTrack, prevTrack, muteUnmute, volumeUp, volumeDown, repeatTrack, randomTrack, micOn, randomOn }
+
+
 let now_playing = document.querySelector('.now-playing');
 let music_art = document.querySelector('.music_art');
 let music_name = document.querySelector('.music-name');
