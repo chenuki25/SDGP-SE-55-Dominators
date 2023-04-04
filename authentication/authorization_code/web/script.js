@@ -245,39 +245,39 @@ function setUpdate(){
 
 // --------- voice recognition part starts
 
-if (annyang) {
-    // commands.
-    const commands = {
-      'play': () => { playpauseTrack() },
-      'pause music': () => { playpauseTrack()},
-      'pause': () => { playpauseTrack() },
-      'next': () => { nextTrack() },
-      'next song': () => { nextTrack() },
-      'back': () => { prevTrack() },
-      'previous song': () => { prevTrack() },
-      'mute': () => { muteUnmute() },
-      'unmute': () => { muteUnmute() },
-      'volume up': () => { volumeUp() },
-      'increase volume': () => { volumeUp() },
-      'volume down': () => { volumeDown() },
-      'decreace volume': () => { volumeDown() },
+// if (annyang) {
+//     // commands.
+//     const commands = {
+//       'play': () => { playpauseTrack() },
+//       'pause music': () => { playpauseTrack()},
+//       'pause': () => { playpauseTrack() },
+//       'next': () => { nextTrack() },
+//       'next song': () => { nextTrack() },
+//       'back': () => { prevTrack() },
+//       'previous song': () => { prevTrack() },
+//       'mute': () => { muteUnmute() },
+//       'unmute': () => { muteUnmute() },
+//       'volume up': () => { volumeUp() },
+//       'increase volume': () => { volumeUp() },
+//       'volume down': () => { volumeDown() },
+//       'decreace volume': () => { volumeDown() },
 
-      'play random': () => { playRandom() },
-      'trun on random': () => { playRandom() },
-      'play random off': () => { playRandom() },
-      'trun off random': () => { playRandom() },
+//       'play random': () => { playRandom() },
+//       'trun on random': () => { playRandom() },
+//       'play random off': () => { playRandom() },
+//       'trun off random': () => { playRandom() },
 
-      'repeat on': () => { repeatTrack() },
-      'repeat': () => { repeatTrack() },
-      'turn on repeat': () => { repeatTrack() },
-    };
+//       'repeat on': () => { repeatTrack() },
+//       'repeat': () => { repeatTrack() },
+//       'turn on repeat': () => { repeatTrack() },
+//     };
   
-    // Add commands to annyang
-    annyang.addCommands(commands);
+//     // Add commands to annyang
+//     annyang.addCommands(commands);
   
-    // Start listening.
-    annyang.start();
-}
+//     // Start listening.
+//     annyang.start();
+// }
 
 // ------- voice recognition part ends
 
