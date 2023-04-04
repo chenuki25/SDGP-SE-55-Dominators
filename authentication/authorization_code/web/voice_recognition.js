@@ -1,8 +1,6 @@
-import{playpauseTrack, nextTrack, prevTrack, muteUnmute, volumeUp, volumeDown, repeatTrack, randomTrack, micOn, randomOn } from './script';
 
 
-// playpauseTrack, nextTrack, prevTrack, muteUnmute, volumeUp, volumeDown, repeatTrack, randomTrack
-// micOn, randomOn
+
 
 // //Define the speech recognition object
 // const recognition = new webkitSpeechRecognition();
