@@ -52,82 +52,22 @@
             </span>
           </div>
           <!-- // -->
-            <div class="random-track" onclick="randomTrack()">
+            <div class="random-track" id="randomBtn" onclick="randomTrack()">
                 <i class="fas fa-random fa-2x" title="random"></i>
             </div>
-            <div class="prev-track" onclick="prevTrack()">
+            <div class="prev-track" id="prevBtn" onclick="prevTrack()">
                 <i class="fa fa-step-backward fa-2x"></i>
             </div>
-            <div class="playpause-track" onclick="playpauseTrack()">
+            <div class="playpause-track" id="playPauseBtn" onclick="playpauseTrack()">
                 <i class="fa fa-play-circle fa-5x"></i>
             </div>
-            <div class="next-track" onclick="nextTrack()">
+            <div class="next-track" id="nextBtn" onclick="nextTrack()">
                 <i class="fa fa-step-forward fa-2x"></i>
             </div>
-            <div class="repeat-track" onclick="repeatTrack()">
+            <div class="repeat-track" id="repeatBtn" onclick="repeatTrack()">
                 <i class="fa fa-repeat fa-2x" title="repeat"></i>
             </div>
         </div>
-
-        <!-- <script> -->
-          //Define the speech recognition object
-          // const recognition = new webkitSpeechRecognition();
-          // recognition.continuous = false;
-          // recognition.lang = 'en-US';
-          // recognition.interimResults = false;
-          // recognition.maxAlternatives = 1;
-        
-          // //Add event listeners for the recognition object
-          // recognition.onresult = function(event) {
-          //   const result = event.results[0][0].transcript.trim().toLowerCase();
-          //   console.log('Speech recognition result:', result);
-          //   switch (result) {
-          //     case 'random':
-          //       randomTrack();
-          //       break;
-          //     case 'previous':
-          //       prevTrack();
-          //       break;
-          //     case 'play':
-          //       playpauseTrack();
-          //       break;
-          //     case 'pause':
-          //       playpauseTrack();
-          //       break;
-          //     case 'next':
-          //       nextTrack();
-          //       break;
-          //     case 'repeat':
-          //       repeatTrack();
-          //       break;
-          //     default:
-          //       console.log('Unknown command: ' + result);
-          //   }
-          // };
-          // recognition.onerror = function(event) {
-          //   console.error('Speech recognition error occurred: ' + event.error);
-          //   if (event.error == 'no-speech') {
-          //     // Display a message to the user
-          //     const message = document.createElement('p');
-          //     message.innerText = 'No speech was detected. Please try again.';
-          //     document.body.appendChild(message);
-          //   }
-          // };
-        
-          // // Add a function to start speech recognition
-          // function startSpeechRecognition() {
-          //   console.log('Starting speech recognition...');
-          //   recognition.start();
-          // }
-
-          // document.addEventListener('keydown', function(event) {
-          //   if (event.key === 'r') {
-          //     startSpeechRecognition();
-          //    }
-          // });
-        
-        <!-- </script> -->
-        
       </div>
         <div class="sidebar">
           <div class="container">
@@ -209,7 +149,7 @@
 
               <br>
               <div>
-                <label>Turn on Mic <br> <span class="pressR">(Press 'R' to Unmute)</span></label>
+                <label>Turn on Mic<br><br></label>
               </div>
               <div class="mic-icon" style="cursor: pointer;">
                 <span class="material-symbols-outlined" id="micBtn">

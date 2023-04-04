@@ -16,6 +16,23 @@ const volumeIcon = document.querySelector('.volume-icon');
 
 
 
+
+
+
+const micIcon = document.querySelector('.mic-icon');
+const micButton = document.querySelector('#micBtn');
+const randomBtn = document.querySelector('#randomBtn');
+const prevBtn = document.querySelector('#prevBtn');
+const playPauseBtn = document.querySelector('#playPauseBtn');
+const nextBtn = document.querySelector('#nextBtn');
+const repeatBtn = document.querySelector('#repeatBtn');
+
+let trackPlaying = false;
+let micOn = false;
+let randomOn = false;
+
+
+
 let musicIndex = 0;
 let isRandom = false;
 let isPlaying = false;
@@ -123,6 +140,7 @@ function reset(){
 
 function randomTrack(){
     isRandom ? pauseRandom() : playRandom();
+    randomOn = true;
 }
 function playRandom(){
     isRandom = true;
@@ -245,39 +263,196 @@ function setUpdate(){
 
 // --------- voice recognition part starts
 
-// if (annyang) {
-//     // commands.
-//     const commands = {
-//       'play': () => { playpauseTrack() },
-//       'pause music': () => { playpauseTrack()},
-//       'pause': () => { playpauseTrack() },
-//       'next': () => { nextTrack() },
-//       'next song': () => { nextTrack() },
-//       'back': () => { prevTrack() },
-//       'previous song': () => { prevTrack() },
-//       'mute': () => { muteUnmute() },
-//       'unmute': () => { muteUnmute() },
-//       'volume up': () => { volumeUp() },
-//       'increase volume': () => { volumeUp() },
-//       'volume down': () => { volumeDown() },
-//       'decreace volume': () => { volumeDown() },
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition; // if none exists -> undefined
 
-//       'play random': () => { playRandom() },
-//       'trun on random': () => { playRandom() },
-//       'play random off': () => { playRandom() },
-//       'trun off random': () => { playRandom() },
+if(SpeechRecognition){
+    console.log("Your browser supports speech recognition");
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.lang = "en-US";
+  
+    micIcon.addEventListener("click", micBtnClick);
 
-//       'repeat on': () => { repeatTrack() },
-//       'repeat': () => { repeatTrack() },
-//       'turn on repeat': () => { repeatTrack() },
-//     };
+    function micBtnClick() {
+      if(!micOn) { // Start Voice Recognition
+        recognition.start(); // First time you have to allow access to mic!
+        micButton.innerHTML = `
+            <span class="material-symbols-outlined">
+                mic
+            </span>
+        `;
+        micOn = true;
+      }
+      else {
+        recognition.stop();
+        micOn = false;
+      }
+    }
   
-//     // Add commands to annyang
-//     annyang.addCommands(commands);
+    recognition.addEventListener("start", startSpeechRecognition); // <=> recognition.onstart = function() {...}
+    function startSpeechRecognition() {
+        micButton.innerHTML = `
+            <span class="material-symbols-outlined">
+                mic
+            </span>
+        `;
+        micOn = true;
+      console.log("Voice activated, SPEAK");
+    }
   
-//     // Start listening.
-//     annyang.start();
-// }
+    recognition.addEventListener("end", endSpeechRecognition); // <=> recognition.onend = function() {...}
+    function endSpeechRecognition() {
+        micButton.innerHTML = `
+            <span class="material-symbols-outlined">
+                mic_off
+            </span>
+        `;
+        recognition.stop();
+        micOn = false;
+
+      console.log("Speech recognition service disconnected");
+    }
+
+    recognition.addEventListener("result", resultOfSpeechRecognition); // <=> recognition.onresult = function(event) {...} - Fires when you stop talking
+    function resultOfSpeechRecognition(event) {
+      const current = event.resultIndex;
+      const transcript = event.results[current][0].transcript;
+      
+      if(transcript.toLowerCase().trim()==="Hey musify") {
+        if(micOn == true){
+            console.log("Voice activated, SPEAK");
+        }else{
+            recognition.start();
+            console.log("Voice activated, SPEAK");
+            micButton.innerHTML = `
+                <span class="material-symbols-outlined">
+                    mic
+                </span>
+            `;
+        }
+      }
+      else {
+        if(transcript.toLowerCase().trim()==="play") {
+            if(micOn == true){
+                playpauseTrack();
+                console.log("Voice activated, playing music");
+            }else{
+                recognition.start();
+                playpauseTrack();
+                console.log("Voice activated, playing music");
+            }
+            
+        //   searchForm.submit();
+        }
+        else if(transcript.toLowerCase().trim()==="pause" || transcript.toLowerCase().trim()==="pause music") {
+            if(micOn == true){
+                playpauseTrack();
+                console.log("Voice activated, music paused");
+            }else{
+                recognition.start();
+                playpauseTrack();
+                console.log("Voice activated, music paused");
+            }
+        }
+        else if(transcript.toLowerCase().trim()==="next" || transcript.toLowerCase().trim()==="next song") {
+            if(micOn == true){
+                nextTrack();
+                console.log("Voice activated, playing next song");
+            }else{
+                recognition.start();
+                nextTrack();
+                console.log("Voice activated, playing next song");
+            }
+        }
+        else if(transcript.toLowerCase().trim()==="back" || transcript.toLowerCase().trim()==="previous song") {
+            if(micOn == true){
+                prevTrack();
+                console.log("Voice activated, playing previous song");
+            }else{
+                recognition.start();
+                prevTrack();
+                console.log("Voice activated, playing previous song");
+            }
+        }
+        else if(transcript.toLowerCase().trim()==="mute" || transcript.toLowerCase().trim()==="mute volume") {
+            if(micOn == true){
+                muteUnmute()
+                console.log("Voice activated, volume muted");
+            }else{
+                recognition.start();
+                muteUnmute()
+                console.log("Voice activated, volume muted");
+            }
+        }
+        else if(transcript.toLowerCase().trim()==="unmute" || transcript.toLowerCase().trim()==="unmute volume") {
+            if(micOn == true){
+                muteUnmute()
+                console.log("Voice activated, volume unmuted");
+            }else{
+                recognition.start();
+                muteUnmute()
+                console.log("Voice activated, volume unmuted");
+            }
+        }
+        else if(transcript.toLowerCase().trim()==="volume up") {
+            if(micOn == true){
+                volumeUp()
+                console.log("Voice activated, increasing the volume");
+            }else{
+                recognition.start();
+                volumeUp()
+                console.log("Voice activated, increasing the volume");
+            }
+        }
+        else if(transcript.toLowerCase().trim()==="volume down") {
+            if(micOn == true){
+                volumeDown()
+                console.log("Voice activated, decreacing the volume");
+            }else{
+                recognition.start();
+                volumeDown()
+                console.log("Voice activated, decreacing the volume");
+            }
+        }
+        else if(transcript.toLowerCase().trim()==="repeat" || transcript.toLowerCase().trim()==="turn on repeat") {
+            if(micOn == true){
+                repeatTrack()
+                console.log("Voice activated, repeating");
+            }else{
+                recognition.start();
+                repeatTrack()
+                console.log("Voice activated, repeating");
+            }
+        }
+        else if(transcript.toLowerCase().trim()==="random" || transcript.toLowerCase().trim()==="turn on random") {
+            if(micOn == true){
+                randomTrack()
+                if(!randomOn){
+                    console.log("Voice activated, turned off random");
+                    randomOn = false;
+                }else{
+                    console.log("Voice activated, turned on random");
+                }
+            }else{
+                recognition.start();
+                randomTrack()
+                if(!randomOn){
+                    console.log("Voice activated, turned off random");
+                    randomOn = false;
+                }else{
+                    console.log("Voice activated, turned on random");
+                }
+            }
+        }
+        else {
+            console.log("Invalid Voice Command or Speak Louder, Please try again...");
+        }
+      }
+    }
+}else{
+    console.log("Your Browser does not support speech Recognition");
+    info.textContent = "Your Browser does not support Speech Recognition";
+}
 
 // ------- voice recognition part ends
 
