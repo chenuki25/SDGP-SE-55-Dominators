@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Account Auth</title>
+    <link rel="stylesheet" href="./spotifyAppAuthScript.css">
+</head>
+<body>
+    <div id="step1">
+        <div>Step 1 : Go to - <a href="https://developer.spotify.com/dashboard">developer.spotify.com/dashboard</a> ,Click Agree</div>
+        <br>
+        <img src="./images/SpotifyAuth_1.png" alt="SpotifyAuth Step 1" height="600">
+    </div>
+    <hr>
+    <div id="step2">
+        <div> Step 2 : Create an app and Fill the Ridect Url with <b>http://localhost:8888/callback</b></div>
+        <br>
+        <img src="./images/SpotifyAuth_2.png" alt="SpotifyAuth Step 2" height="600">
+    </div>
+    <hr>
+    <div id="step3">
+        <div>Step 3 :Click On the Create App go to the settings after that Copy the Client ID and Client Secret and paste it in the Appropriate Input boxes</div>
+        <br>
+        <img src="./images/SpotifyAuth_3.png" alt="SpotifyAuth Step 3" height="600">
+    </div>
+
+    <!-- create a two input box to get client id and client secret from the user -->
+    <div id="step4">
+        <br>
+        <div id="inputBox">
+            <input type="text" id="clientID" placeholder="Enter Client ID" required>
+            <input type="text" id="clientSecret" placeholder="Enter Client Secret" required>
+            <button id="submit" class = "button">Submit</button>
+        </div>
+    </div>  
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $("#submit").click(function() {
+        // get the client id and client secret from the input box
+        var clientID = $("#clientID").val();
+        var clientSecret = $("#clientSecret").val();
+        
+        // // // redirect to the spotify.html
+        window.location.href = "/login?clientId=" + clientID + "&clientSecret=" + clientSecret;    
+    });
+    </script>
+</body>
+</html>

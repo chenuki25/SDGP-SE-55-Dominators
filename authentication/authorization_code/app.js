@@ -12,9 +12,17 @@ var request = require('request'); // "Request" library
 var cors = require('cors');
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
+var dotenv = require('dotenv');
+var fs = require('fs');
+const path = require('path');
 
-var client_id = '80ccb90d0ca1497485691f15ec02de9b'; // Your client id
-var client_secret = 'dfa1b73baf62410885ae93923018dc94'; // Your secret
+// load environment variables from .env file
+dotenv.config();
+
+
+// var client_id = 'be01ed2f41d041f596721a5543421948'; // Your client id
+// var client_secret = '48d4000267f342cab9aa17aa23ee82eb'; // Your secret
+
 var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
 
 /**
@@ -36,13 +44,40 @@ var stateKey = 'spotify_auth_state';
 
 var app = express();
 
+app.post('/saveClientCredentials', (req, res) => {
+  const { clientId, clientSecret } = req.body;
+  // update the .env file with the new client credentials
+  fs.writeFileSync('.env', `SPOTIFY_CLIENT_ID=${clientId}\nSPOTIFY_CLIENT_SECRET=${clientSecret}\n`);
+  res.send('Client credentials saved');
+});
+
+
 app.use(express.static(__dirname + '/public'))
    .use(cors())
    .use(cookieParser());
 //use web folder 
 app.use(express.static(__dirname + '/web'));
 
+var client_id;
+var client_secret;
+
 app.get('/login', function(req, res) {
+  console.log(req.query);
+  client_id = req.query.clientId;
+  client_secret = req.query.clientSecret;
+  
+  // Write client ID and client secret to .env file
+  const envFilePath = path.join(__dirname, '.env');
+  const envFileContent = `SPOTIFY_CLIENT_ID=${client_id}\nSPOTIFY_CLIENT_SECRET=${client_secret}\n`;
+
+  try {
+    console.log("saving....")
+    fs.writeFileSync(envFilePath, envFileContent, { encoding: 'utf-8' });
+    console.log(`Wrote to ${envFilePath}: ${envFileContent}`);
+  } catch (error) {
+    console.error(`Error writing to ${envFilePath}: ${error}`);
+  }
+
 
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
