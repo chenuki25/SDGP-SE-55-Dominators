@@ -66,19 +66,6 @@ app.get('/login', function(req, res) {
   client_id = req.query.clientId;
   client_secret = req.query.clientSecret;
   
-  // Write client ID and client secret to .env file
-  const envFilePath = path.join(__dirname, '.env');
-  const envFileContent = `SPOTIFY_CLIENT_ID=${client_id}\nSPOTIFY_CLIENT_SECRET=${client_secret}\n`;
-
-  try {
-    console.log("saving....")
-    fs.writeFileSync(envFilePath, envFileContent, { encoding: 'utf-8' });
-    console.log(`Wrote to ${envFilePath}: ${envFileContent}`);
-  } catch (error) {
-    console.error(`Error writing to ${envFilePath}: ${error}`);
-  }
-
-
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
 

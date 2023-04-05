@@ -21,7 +21,7 @@
     </div>
     <hr>
     <div id="step3">
-        <div>Step 3 :Click On the Create App go to the settings after that Copy the Client ID and Client Secret and paste it in the Appropriate Input boxes</div>
+        <div>Step 3 :Click On the Created App go to the settings after that Copy the Client ID and Client Secret and paste it in the Appropriate Input boxes</div>
         <br>
         <img src="./images/SpotifyAuth_3.png" alt="SpotifyAuth Step 3" height="600">
     </div>
@@ -41,7 +41,9 @@
         // get the client id and client secret from the input box
         var clientID = $("#clientID").val();
         var clientSecret = $("#clientSecret").val();
-        
+        localStorage.setItem('client_id', document.getElementById('clientID').value);
+        localStorage.setItem('client_secret', document.getElementById('clientSecret').value);
+
         // // // redirect to the spotify.html
         window.location.href = "/login?clientId=" + clientID + "&clientSecret=" + clientSecret;    
     });
