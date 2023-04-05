@@ -1,4 +1,4 @@
-# Music Player Control with Hoice and Hand
+# Music Player Control with Voice Recogniton and Hand Gestures
 
 Functions------
 1) Random Song
